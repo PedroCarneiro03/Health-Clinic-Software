@@ -1,0 +1,103 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    url: jdbc:postgresql://db:5432/portalsaude-db
+    username: user
+    password: 123
+    
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  security:
+    jwt:
+      secret: thisisthesecretkey
+
+  web:
+    resources:
+      static-locations: "file:./uploads/"  # em teoria isto deve funcionar facilmente basta dar GET http://localhost:8081/a1b2c3d4-meu-perfil.jpg EXEMPLO!
+    
+  task:
+    scheduling:
+      pool:
+        size: 10
+      thread-name-prefix: "notification-scheduler-"
+
+# Opção 1 para TLS
+
+# To enable SSL, uncomment the following lines and configure the keystore details accordingly.        
+#
+# server:
+#   port: 8443
+#   ssl:
+#     enabled: true
+#     key-store: classpath:portalsaude.p12
+#     key-store-password: 123456
+#     key-store-type: PKCS12
+#     key-alias: portalsaude
+#
+# spring:
+#   datasource:
+#     url: jdbc:postgresql://localhost:12345/portalsaude-db
+#     username: user
+#     password: 123
+#   jpa:
+#     hibernate:
+#       ddl-auto: update
+#     show-sql: true
+#     properties:
+#       hibernate:
+#         dialect: org.hibernate.dialect.PostgreSQLDialect
+#
+# Do this command on folder src/main/resources to generate the keystore file:
+#
+# keytool -genkeypair -alias portalsaude -keyalg RSA -keysize 2048 -storetype PKCS12 -keystore portalsaude.p12 -validity 3650
+
+
+
+# Opção 2 para TLS
+
+#spring:
+#  config:
+#    activate:
+#      on-profile: ssl
+#
+#server:
+#  port: 8443
+#  ssl:
+#    enabled: true
+#    key-store: classpath:portalsaude.p12
+#    key-store-password: portalsaude123
+#    key-store-type: PKCS12
+#    key-alias: portalsaude
+#    
+#    # Configurações básicas de TLS
+#    protocol: TLS
+#    enabled-protocols: TLSv1.2,TLSv1.3
+#
+#spring:
+#  datasource:
+#    url: jdbc:postgresql://localhost:12345/portalsaude-db
+#    username: user
+#    password: 123
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
+#
+#
+#
+# Do this command on folder src/main/resources to generate the keystore file:
+#
+# keytool -genkeypair -alias portalsaude -keyalg RSA -keysize 2048 -storetype PKCS12 -keystore portalsaude.p12 -validity 3650
+#
+#
+# Quando implementarmos trocar os @CrossOrigin(origins = "*") nos controllers

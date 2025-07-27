@@ -1,0 +1,1323 @@
+{
+    "info": {
+        "name": "PortalSaude API",
+        "_postman_id": "7b3e8a9c-4f2b-4e7b-9a1f-3c7d8e2a1b3c",
+        "description": "Postman collection to test the PortalSaude API endpoints",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Auth",
+            "item": [
+                {
+                    "name": "Login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Login successful\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.token).to.exist;",
+                                    "    pm.environment.set(\"jwtToken\", jsonData.token);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"id\": \"1\", \"password\": \"password123\"}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/users",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "users"]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "User",
+            "item": [
+                {
+                    "name": "Get User by ID",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/users/1",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "users", "1"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Change User Password",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "\"newPassword123\""
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/users/1/password",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "users", "1", "password"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete User",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/users/1",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "users", "1"]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Doctor",
+            "item": [
+                {
+                    "name": "Create Doctor",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Doctor created\", function () {",
+                                    "    pm.response.to.have.status(201);",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.environment.set(\"doctorId\", jsonData.userId);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"password\": \"doctorPass123\", \"name\": \"Dr. John Doe\", \"specialization\": \"Cardiology\"}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctors",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "doctors"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Doctor by ID",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctors/{{doctorId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "doctors", "{{doctorId}}"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Doctor",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"name\": \"Dr. John Doe Updated\", \"specialization\": \"Neurology\"}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctors/{{doctorId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "doctors", "{{doctorId}}"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Doctor Photo",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"photoUrl\": \"https://example.com/doctor-photo.jpg\"}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctors/{{doctorId}}/photo",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "doctors", "{{doctorId}}", "photo"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Doctor",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/doctors/{{doctorId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "doctors", "{{doctorId}}"]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Patient",
+            "item": [
+                {
+                    "name": "Create Patient",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Patient created\", function () {",
+                                    "    pm.response.to.have.status(201);",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.environment.set(\"patientId\", jsonData.userId);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"password\": \"patientPass123\", \"name\": \"Jane Smith\", \"birthdate\": \"1990-05-15\", \"gender\": true, \"doctorId\": {{doctorId}}}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/patients",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "patients"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Patient by ID",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/patients/{{patientId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "patients", "{{patientId}}"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Patients by Doctor",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/patients/doctor/{{doctorId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "patients", "doctor", "{{doctorId}}"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Patient",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"name\": \"Jane Smith Updated\", \"phoneNumber\": \"1234567890\", \"address\": \"123 Main St\", \"height\": 165, \"weight\": 60}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/patients/{{patientId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "patients", "{{patientId}}"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Patient Photo",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"photoUrl\": \"https://example.com/patient-photo.jpg\"}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/patients/{{patientId}}/photo",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "patients", "{{patientId}}", "photo"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Patient Vaccines Book",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"vaccinesBookUrl\": \"https://example.com/vaccines-book.pdf\"}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/patients/{{patientId}}/vaccines-book",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "patients", "{{patientId}}", "vaccines-book"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Assign Doctor to Patient",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "PATCH",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/patients/{{patientId}}/doctor/{{doctorId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "patients", "{{patientId}}", "doctor", "{{doctorId}}"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Patient",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/patients/{{patientId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "patients", "{{patientId}}"]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Medication",
+            "item": [
+                {
+                    "name": "Get All Medications",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/medications",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "medications"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Medication by ID",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/medications/1",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "medications", "1"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Search Medication by Name",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/medications/search?name=Paracetamol",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "medications", "search"],
+                            "query": [{"key": "name", "value": "Paracetamol"}]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Create Medication",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Medication created\", function () {",
+                                    "    pm.response.to.have.status(201);",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.environment.set(\"medicationId\", jsonData.id);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"name\": \"Paracetamol\", \"description\": \"Pain reliever\", \"activeIngredient\": \"Acetaminophen\", \"manufacturer\": \"Generic Pharma\"}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/medications",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "medications"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Medication",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"name\": \"Paracetamol Updated\", \"description\": \"Pain reliever and fever reducer\", \"activeIngredient\": \"Acetaminophen\", \"manufacturer\": \"Generic Pharma\"}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/medications/{{medicationId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "medications", "{{medicationId}}"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Medication",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/medications/{{medicationId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "medications", "{{medicationId}}"]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Prescription",
+            "item": [
+                {
+                    "name": "Create Prescription",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Prescription created\", function () {",
+                                    "    pm.response.to.have.status(201);",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.environment.set(\"prescriptionId\", jsonData.id);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"patientId\": {{patientId}}, \"doctorId\": {{doctorId}}, \"date\": \"2025-06-11\", \"additionalInformation\": \"Take with food\", \"medications\": [{{medicationId}}]}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/prescriptions",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "prescriptions"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Prescriptions by Patient",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/prescriptions/patient/{{patientId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "prescriptions", "patient", "{{patientId}}"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Prescription by ID",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/prescriptions/{{prescriptionId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "prescriptions", "{{prescriptionId}}"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Prescription",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"patientId\": {{patientId}}, \"doctorId\": {{doctorId}}, \"date\": \"2025-06-12\", \"additionalInformation\": \"Updated: Take with water\", \"medications\": [{{medicationId}}]}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/prescriptions/{{prescriptionId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "prescriptions", "{{prescriptionId}}"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Prescription",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/prescriptions/{{prescriptionId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "prescriptions", "{{prescriptionId}}"]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Drug",
+            "item": [
+                {
+                    "name": "Create Drug",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Drug created\", function () {",
+                                    "    pm.response.to.have.status(201);",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.environment.set(\"drugId\", jsonData.id);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"doctorId\": {{doctorId}}, \"patientId\": {{patientId}}, \"name\": \"Ibuprofen\", \"dosage\": \"200mg\", \"notes\": \"Take twice daily\", \"prescriptionFileUrl\": \"https://example.com/prescription.pdf\"}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/drugs",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "drugs"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Drug by ID",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/drugs/{{drugId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "drugs", "{{drugId}}"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Drugs by Patient",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/drugs/patient/{{patientId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "drugs", "patient", "{{patientId}}"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Activate Drug",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "PATCH",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/drugs/{{drugId}}/activate",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "drugs", "{{drugId}}", "activate"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Deactivate Drug",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "PATCH",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/drugs/{{drugId}}/deactivate",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "drugs", "{{drugId}}", "deactivate"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Add Prescription File",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "\"https://example.com/updated-prescription.pdf\""
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/drugs/{{drugId}}/prescription",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "drugs", "{{drugId}}", "prescription"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Prescription File",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/drugs/{{drugId}}/prescription",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "drugs", "{{drugId}}", "prescription"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Drug",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/drugs/{{drugId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "drugs", "{{drugId}}"]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Exam",
+            "item": [
+                {
+                    "name": "Create Exam",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Exam created\", function () {",
+                                    "    pm.response.to.have.status(201);",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.environment.set(\"examId\", jsonData.id);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"doctorId\": {{doctorId}}, \"patientId\": {{patientId}}, \"name\": \"Blood Test\", \"type\": \"Laboratory\", \"status\": 1}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/exams",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "exams"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Exams by Patient",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/exams/patient/{{patientId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "exams", "patient", "{{patientId}}"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Exam by ID",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/exams/{{examId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "exams", "{{examId}}"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Change Exam Status",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "2"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/exams/{{examId}}/status",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "exams", "{{examId}}", "status"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Add Exam File URL",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "\"https://example.com/exam-result.pdf\""
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/exams/{{examId}}/file",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "exams", "{{examId}}", "file"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Exam File URL",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/exams/{{examId}}/file",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "exams", "{{examId}}", "file"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Exam",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/exams/{{examId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "exams", "{{examId}}"]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Consult",
+            "item": [
+                {
+                    "name": "Create Consult",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Consult created\", function () {",
+                                    "    pm.response.to.have.status(201);",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.environment.set(\"consultId\", jsonData.id);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"doctorId\": {{doctorId}}, \"patientId\": {{patientId}}, \"startDate\": \"2025-06-15\"}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/consults",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "consults"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Consult by ID",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/consults/{{consultId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "consults", "{{consultId}}"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Consults by Patient",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/consults/patient/{{patientId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "consults", "patient", "{{patientId}}"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Consults by Doctor",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/consults/doctor/{{doctorId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "consults", "doctor", "{{doctorId}}"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Consult Link",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "\"https://example.com/consult-link\""
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/consults/{{consultId}}/link",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "consults", "{{consultId}}", "link"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Mark Consult Finished",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "PATCH",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/consults/{{consultId}}/finish",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "consults", "{{consultId}}", "finish"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Consult",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/consults/{{consultId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "consults", "{{consultId}}"]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Notification",
+            "item": [
+                {
+                    "name": "Create Notification",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Notification created\", function () {",
+                                    "    pm.response.to.have.status(201);",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.environment.set(\"notificationId\", jsonData.id);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"userId\": {{patientId}}, \"type\": \"Reminder\", \"title\": \"Appointment Reminder\", \"description\": \"Your appointment is scheduled for tomorrow.\"}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/notifications",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "notifications"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Notification by ID",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/notifications/{{notificationId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "notifications", "{{notificationId}}"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Notifications by User",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/notifications/user/{{patientId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "notifications", "user", "{{patientId}}"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Mark Notification as Seen",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "PATCH",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/notifications/{{notificationId}}/seen",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "notifications", "{{notificationId}}", "seen"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Notification",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [{"key": "token", "value": "{{jwtToken}}", "type": "string"}]
+                        },
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/notifications/{{notificationId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "notifications", "{{notificationId}}"]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        }
+    ],
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:8081"
+        }
+    ]
+}

@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:17
+    container_name: portalsaude-db
+    environment:
+      POSTGRES_DB: portalsaude-db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: 123
+    ports:
+      - "12345:5432"
+    volumes:
+      - ./db/init:/docker-entrypoint-initdb.d
+    networks:
+      - portalsaude-net
+
+  wildfly1:
+    build:
+      context: ./code/portalsaude-api
+    container_name: wildfly1
+    depends_on:
+      - db
+    ports:
+      - "8082:8080"
+    networks:
+      - portalsaude-net
+    volumes:
+      - ./uploads:/opt/jboss/uploads
+    command: /opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0
+
+  wildfly2:
+    build:
+      context: ./code/portalsaude-api
+    container_name: wildfly2
+    depends_on:
+      - db
+    ports:
+      - "8083:8080"
+    networks:
+      - portalsaude-net
+    volumes:
+      - ./uploads:/opt/jboss/uploads
+    command: /opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0
+
+  nginx-balancer:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    container_name: nginx-balancer
+    depends_on:
+      - wildfly1
+      - wildfly2
+    ports:
+      - "8081:80"
+    networks:
+      - portalsaude-net
+
+  frontend:
+    build:
+      context: ./code/frontend
+    container_name: frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - nginx-balancer
+    networks:
+      - portalsaude-net
+networks:
+  portalsaude-net:
+    driver: bridge

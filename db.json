@@ -1,0 +1,116 @@
+{
+  "notifications": [
+    {
+      "id": "1",
+      "title": "Reunião com a equipa",
+      "description": "A reunião diária começa em 30 minutos.",
+      "date": "2025-06-05T09:00:00Z",
+      "read": false,
+      "type": "default"
+    },
+    {
+      "id": "2",
+      "title": "Nova mensagem de Maria",
+      "description": "Maria enviou um comentário sobre o projeto.",
+      "date": "2025-06-05T14:45:00Z",
+      "read": false,
+      "type": "comment"
+    },
+    {
+      "id": "3",
+      "title": "Backup concluído",
+      "description": "O backup do sistema foi bem-sucedido.",
+      "date": "2025-06-04T18:20:00Z",
+      "read": false,
+      "type": "alert"
+    },
+    {
+      "id": "4",
+      "title": "Atualização disponível",
+      "description": "Há uma nova versão da aplicação para instalar.",
+      "date": "2025-06-04T10:15:00Z",
+      "read": false,
+      "type": "info"
+    },
+    {
+      "id": "5",
+      "title": "Fatura pendente",
+      "description": "Não te esqueças de pagar a fatura até o fim do mês.",
+      "date": "2025-05-30T08:00:00Z",
+      "read": false,
+      "type": "default"
+    },
+    {
+      "id": "6",
+      "title": "Convite para webinar",
+      "description": "Participe do webinar de boas práticas de TypeScript.",
+      "date": "2025-05-25T16:30:00Z",
+      "read": false,
+      "type": "info"
+    },
+    {
+      "id": "7",
+      "title": "Nova mensagem de Pedro",
+      "description": "Pedro enviou um resumo da reunião.",
+      "date": "2025-06-06T09:30:00Z",
+      "read": false,
+      "type": "message"
+    },
+    {
+      "id": "8",
+      "title": "Comentário em tarefa",
+      "description": "João comentou na tarefa #99: “Precisamos ajustar o cronograma.”",
+      "date": "2025-06-06T11:00:00Z",
+      "read": true,
+      "type": "comment"
+    },
+    {
+      "id": "9",
+      "title": "Alerta de segurança",
+      "description": "Foi detectada uma tentativa de login suspeita.",
+      "date": "2025-06-06T12:15:00Z",
+      "read": true,
+      "type": "alert"
+    },
+    {
+      "id": "10",
+      "title": "Informação de sistema",
+      "description": "O sistema estará em manutenção às 23h.",
+      "date": "2025-06-06T14:45:00Z",
+      "read": true,
+      "type": "info"
+    },
+    {
+      "id": "11",
+      "title": "Lembrete de perfil",
+      "description": "Verifique se seu perfil está atualizado.",
+      "date": "2025-06-06T16:30:00Z",
+      "read": true,
+      "type": "default"
+    }
+  ],
+  "users": [
+    {
+      "id": "user-1",
+      "full_name": "Ana Martins",
+      "health_number": "123456789",
+      "date_of_birth": "1985-04-12",
+      "gender": "female",
+      "email": "ana.martins@example.com",
+      "password": "P@ssw0rd123",
+      "contact": "+351912345678",
+      "nationality": "Portugal"
+    },
+    {
+      "id": "user-2",
+      "full_name": "Bruno Rodrigues",
+      "health_number": "987654321",
+      "date_of_birth": "1990-11-05",
+      "gender": "male",
+      "email": "bruno.rodrigues@example.com",
+      "password": "S3nh@Segura!",
+      "contact": "+351923456789",
+      "nationality": "Brazil"
+    }
+  ]
+}
